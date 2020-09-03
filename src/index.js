@@ -6,6 +6,7 @@ import { h } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { fixed_partition } from 'image-layout'
 import lazySizes from 'lazysizes'
+import ps from './ps'
 
 ;(() => {
 	const throttle = (type, name, obj) => {
@@ -95,7 +96,7 @@ const Layout = ({ collection, containerWidth, cp }) => {
 
 	return (
 		<>
-			<div style={container}>
+			<div style={container} class="moul-collection-0">
 				{calculated.map((p, i) => (
 					<figure key={i} style={`margin: 0`}>
 						<a
@@ -131,7 +132,7 @@ const Collection = ({ photos, cp, cid }) => {
 	useEffect(() => {
 		window.addEventListener('optimizedResize', handleResize)
 		lazySizes.init()
-		// ps(cid)
+		ps(cid)
 
 		return () => {
 			window.removeEventListener('optimizedResize', handleResize)

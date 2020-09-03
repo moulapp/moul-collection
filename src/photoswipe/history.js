@@ -47,42 +47,19 @@ var _historyUpdateTimeout,
 		}
 	},
 
-	// pid - Picture index
-	// gid - Gallery index
 	_parseItemIndexFromURL = function() {
 		var hash = _getHash(),
 			params = {};
 
-		if(hash.length < 5) { // pid=1
+		if(hash.length < 5) {
 			return params;
 		}
 
-		var i, vars = hash.split('&');
-		for (i = 0; i < vars.length; i++) {
-			if(!vars[i]) {
-				continue;
-			}
-			var pair = vars[i].split('=');	
-			if(pair.length < 2) {
-				continue;
-			}
-			params[pair[0]] = pair[1];
-		}
-		if(_options.galleryPIDs) {
-			// detect custom pid in hash and search for it among the items collection
-			var searchfor = params.pid;
-			params.pid = 0; // if custom pid cannot be found, fallback to the first item
-			for(i = 0; i < _items.length; i++) {
-				if(_items[i].pid === searchfor) {
-					params.pid = i;
-					break;
-				}
-			}
-		} else {
-			params.pid = parseInt(params.pid,10)-1;
-		}
-		if( params.pid < 0 ) {
-			params.pid = 0;
+		var vars = hash.split('/');
+
+		params.photo = parseInt(params.photo,10)-1;
+		if( params.photo < 0 ) {
+			params.photo = 0;
 		}
 		return params;
 	},
@@ -107,13 +84,13 @@ var _historyUpdateTimeout,
 		}
 
 
-		var pid = (_currentItemIndex + 1);
+		var photo = (_currentItemIndex + 1);
 		var item = _getItemAt( _currentItemIndex );
-		if(item.hasOwnProperty('pid')) {
+		if(item.hasOwnProperty('photo')) {
 			// carry forward any custom pid assigned to the item
-			pid = item.pid;
+			photo = item.photo;
 		}
-		var newHash = _initialHash + '&'  +  'gid=' + _options.galleryUID + '&' + 'pid=' + pid;
+		var newHash = _initialHash + 'photo/' + photo;
 
 		if(!_historyChanged) {
 			if(_windowLoc.hash.indexOf(newHash) === -1) {
@@ -172,12 +149,6 @@ _registerModule('History', {
 			_supportsPushState = ('pushState' in history);
 
 
-			if(_initialHash.indexOf('gid=') > -1) {
-				_initialHash = _initialHash.split('&gid=')[0];
-				_initialHash = _initialHash.split('?gid=')[0];
-			}
-			
-
 			_listen('afterChange', self.updateURL);
 			_listen('unbindEvents', function() {
 				framework.unbind(window, 'hashchange', self.onHashChange);
@@ -224,16 +195,16 @@ _registerModule('History', {
 				}
 			});
 			_listen('firstUpdate', function() {
-				_currentItemIndex = _parseItemIndexFromURL().pid;
+				_currentItemIndex = _parseItemIndexFromURL().photo;
 			});
 
 			
 
 			
-			var index = _initialHash.indexOf('pid=');
+			var index = _initialHash.indexOf('photo/');
 			if(index > -1) {
 				_initialHash = _initialHash.substring(0, index);
-				if(_initialHash.slice(-1) === '&') {
+				if(_initialHash.slice(-1) === '/') {
 					_initialHash = _initialHash.slice(0, -1);
 				}
 			}
@@ -257,7 +228,7 @@ _registerModule('History', {
 			if(!_hashChangedByScript) {
 
 				_hashChangedByHistory = true;
-				self.goTo( _parseItemIndexFromURL().pid );
+				self.goTo( _parseItemIndexFromURL().photo );
 				_hashChangedByHistory = false;
 			}
 			
