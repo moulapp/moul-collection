@@ -1,7 +1,3 @@
-if (process.env.NODE_ENV==='development') {
-	require("preact/debug");
-}
-
 import { h, render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { fixed_partition } from 'image-layout'
@@ -47,10 +43,10 @@ const calculate = (collection, containerWidth, cp) => {
 	layout.positions.map((p, i) => {
 		const srcHd = collection[i].id
 			? `photos/${collection[i].id}/${cp}/2048/${collection[i].name}-by-${by}.jpg`
-			: `http://localhost:5000/photos/${cp}/${collection[i].src}`
+			: `photos/${cp}/${collection[i].src}`
 		const src = collection[i].id
 			? `photos/${collection[i].id}/${cp}/750/${collection[i].name}-by-${by}.jpg`
-			: `http://localhost:5000/photos/${cp}/${collection[i].src}`
+			: `photos/${cp}/${collection[i].src}`
 		const sqip = collection[i].id
 			? `photos/${collection[i].id}/${cp}/sqip/${collection[i].name}-by-${by}.svg`
 			: ''
@@ -87,25 +83,18 @@ const Layout = ({ collection, containerWidth, cp }) => {
 		containerWidth,
 		cp
 	)
-	const container = { width, height, margin: '0 auto 64px', position: 'relative'}
-	const aStyle = 	{
-		display: 'block',
-		fontSize: 0,
-		float: 'left'
-	}
-
+	const container = { width, height }
 	return (
 		<>
 			<div style={container} class="moul-collection">
 				{calculated.map((p, i) => (
-					<figure key={i} style={`margin: 0`}>
+					<figure key={i}>
 						<a
 							href={p.srcHd}
 							data-dimension={p.dimension}
 							data-pid={p.name}
 							data-color={p.color}
 							data-msrc={p.sqip}
-							style={aStyle}
 						>
 							<img
 								src={p.sqip}

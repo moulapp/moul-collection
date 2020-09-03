@@ -94,8 +94,7 @@ export default (cid) => {
 
 	let openPhotoSwipe = function (
 		index,
-		disableAnimation = false,
-		fromURL
+		fromURL = false
 	) {
 		let pswpElement = document.querySelectorAll('.pswp')[0],
 			gallery,
@@ -131,10 +130,6 @@ export default (cid) => {
 			return
 		}
 
-		if (disableAnimation) {
-			options.showAnimationDuration = 0
-		}
-
 		// Pass data to PhotoSwipe and initialize it
 		gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options)
 		gallery.init()
@@ -149,7 +144,7 @@ export default (cid) => {
 	if (hashData.photo) {
 		let ge = document.querySelector('.moul-collection')
 		setTimeout(() => {
-			openPhotoSwipe(hashData.photo, true, true)
+			openPhotoSwipe(hashData.photo, true)
 		}, 150)
 	}
 }
