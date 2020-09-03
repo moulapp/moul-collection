@@ -2,7 +2,7 @@ if (process.env.NODE_ENV==='development') {
 	require("preact/debug");
 }
 
-import { h } from 'preact';
+import { h, render } from 'preact';
 import { useState, useEffect } from 'preact/hooks';
 import { fixed_partition } from 'image-layout'
 import lazySizes from 'lazysizes'
@@ -96,7 +96,7 @@ const Layout = ({ collection, containerWidth, cp }) => {
 
 	return (
 		<>
-			<div style={container} class="moul-collection-0">
+			<div style={container} class="moul-collection">
 				{calculated.map((p, i) => (
 					<figure key={i} style={`margin: 0`}>
 						<a
@@ -122,7 +122,7 @@ const Layout = ({ collection, containerWidth, cp }) => {
 	)
 }
 
-const Collection = ({ photos, cp, cid }) => {
+const Collection = ({ photos, cp }) => {
 	const [collection, setCollection] = useState(photos)
 	const [containerWidth, setContainerWidth] = useState(window.innerWidth - 16)
 
@@ -133,7 +133,7 @@ const Collection = ({ photos, cp, cid }) => {
 	useEffect(() => {
 		window.addEventListener('optimizedResize', handleResize)
 		lazySizes.init()
-		ps(cid)
+		ps()
 
 		return () => {
 			window.removeEventListener('optimizedResize', handleResize)
@@ -147,16 +147,14 @@ const Collection = ({ photos, cp, cid }) => {
 	)
 }
 
-const Moul = () => {
-	const collection = $('.photo-collection')
-
-	return (
+const collections = $$('.photo-collection')
+collections.forEach((c, i) => {
+	render(
 		<Collection
-			photos={JSON.parse(collection.getAttribute('value'))}
-			cp={collection.getAttribute('data-cp')}
-			cid={`0`}
-		/>
+			photos={JSON.parse(c.getAttribute('value'))}
+			cp={c.getAttribute('data-cp')}
+			cid={i}
+		/>,
+		$(`.moul-collection-${i}`)
 	)
-}
-
-export default Moul
+})

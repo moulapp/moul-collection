@@ -2,8 +2,11 @@ import PhotoSwipe from './photoswipe/index'
 import PhotoSwipeUI_Default from './photoswipe/ui-default.js'
 
 export default (cid) => {
-	let parseThumbnailElements = function (el) {
-		let thumbElements = el.childNodes,
+	const allFigure = document.querySelectorAll('.moul-collection figure');
+	allFigure.forEach((af, i) => af.setAttribute('data-id', i+1))
+
+	let parseThumbnailElements = function () {
+		let thumbElements = allFigure,
 			numNodes = thumbElements.length,
 			items = [],
 			figureEl,
@@ -68,30 +71,9 @@ export default (cid) => {
 			return
 		}
 
-		// find index of clicked item by looping through all child nodes
-		// alternatively, you may define index via data- attribute
-		let clickedGallery = clickedListItem.parentNode,
-			childNodes = clickedListItem.parentNode.childNodes,
-			numChildNodes = childNodes.length,
-			nodeIndex = 0,
-			index
-
-		for (let i = 0; i < numChildNodes; i++) {
-			if (childNodes[i].nodeType !== 1) {
-				continue
-			}
-
-			if (childNodes[i] === clickedListItem) {
-				index = nodeIndex
-				break
-			}
-			nodeIndex++
-		}
-
-		if (index >= 0) {
-			// open PhotoSwipe if valid index found
-			openPhotoSwipe(index, clickedGallery)
-		}
+		let index = clickedListItem.getAttribute('data-id')
+		openPhotoSwipe(index)
+		
 		return false
 	}
 
@@ -112,22 +94,17 @@ export default (cid) => {
 
 	let openPhotoSwipe = function (
 		index,
-		galleryElement,
-		disableAnimation,
+		disableAnimation = false,
 		fromURL
 	) {
 		let pswpElement = document.querySelectorAll('.pswp')[0],
 			gallery,
-			options,
-			items
+			options
 
-		items = parseThumbnailElements(galleryElement, fromURL)
+		let items = parseThumbnailElements()
 
 		// define options (if needed)
 		options = {
-			// define gallery index (for URL)
-			galleryUID: galleryElement.parentNode.getAttribute('data-pswp-uid'),
-
 			getThumbBoundsFn: function (index) {
 				// See Options -> getThumbBoundsFn section of documentation for more info
 				let thumbnail = items[index].el.getElementsByTagName('a')[0]
@@ -145,27 +122,9 @@ export default (cid) => {
 			closeEl: false,
 			arrowEl: false,
 			counterEl: false,
-			bgOpacity: 0.9,
+			bgOpacity: 1,
 		}
-
-		// PhotoSwipe opened from URL
-		if (fromURL) {
-			if (options.galleryPIDs) {
-				// parse real index when custom PIDs are used
-				// http://photoswipe.com/documentation/faq.html#custom-pid-in-url
-				for (let j = 0; j < items.length; j++) {
-					if (items[j].photo == index) {
-						options.index = j
-						break
-					}
-				}
-			} else {
-				// in URL indexes start from 1
-				options.index = parseInt(index, 10) - 1
-			}
-		} else {
-			options.index = parseInt(index, 10)
-		}
+		options.index = parseInt(index, 10) - 1
 
 		// exit if index not found
 		if (isNaN(options.index)) {
@@ -179,24 +138,18 @@ export default (cid) => {
 		// Pass data to PhotoSwipe and initialize it
 		gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options)
 		gallery.init()
-		// gallery.bg.style.backgroundColor = gallery.currItem.bgColor
-
-		// gallery.listen('beforeChange', () => {
-		//   gallery.bg.style.backgroundColor = gallery.currItem.bgColor
-		// })
 	}
 
-	// loop through all gallery elements and bind events
-	let galleryElement = document.querySelector(`#moul`)
-	galleryElement.setAttribute('data-pswp-uid', cid)
-	galleryElement.onclick = onThumbnailsClick
+	let galleryElement = document.querySelectorAll('.moul-collection')
+	galleryElement.forEach(ge => {
+		ge.onclick = onThumbnailsClick
+	})
 
-	// Parse URL and open gallery if it contains #&pid=3&gid=1
 	let hashData = photoswipeParseHash()
 	if (hashData.photo) {
-		let ge = document.querySelector(`#moul`)
+		let ge = document.querySelector('.moul-collection')
 		setTimeout(() => {
-			openPhotoSwipe(hashData.photo, ge.childNodes[1], true, true)
+			openPhotoSwipe(hashData.photo, true, true)
 		}, 150)
 	}
 }
