@@ -104,6 +104,7 @@ const Layout = ({ collection, containerWidth, cp }) => {
 							data-dimension={p.dimension}
 							data-pid={p.name}
 							data-color={p.color}
+							data-msrc={p.sqip}
 							style={aStyle}
 						>
 							<img

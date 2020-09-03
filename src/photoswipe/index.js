@@ -3621,7 +3621,6 @@ _registerModule('History', {
 			var index = _initialHash.indexOf('photo/');
 			if(index > -1) {
 				_initialHash = _initialHash.substring(0, index);
-				console.log('_initialHash:', _initialHash)
 				if(_initialHash.slice(-1) === '/') {
 					_initialHash = _initialHash.slice(0, -1);
 				}

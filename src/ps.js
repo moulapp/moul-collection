@@ -37,10 +37,8 @@ export default (cid) => {
 				item.title = figureEl.children[1].innerHTML
 			}
 
-			if (linkEl.children.length > 0) {
-				// <img> thumbnail element, retrieving thumbnail url
-				item.msrc = linkEl.children[0].getAttribute('src')
-			}
+			const msrc = linkEl.getAttribute('data-msrc');
+			item.msrc =  msrc ? msrc : linkEl.getAttribute('href')
 
 			item.el = figureEl // save link to element for getThumbBoundsFn
 			items.push(item)
@@ -109,7 +107,6 @@ export default (cid) => {
         let vars = hash.split('/')
         params[vars[0]] = vars[1]
 
-        console.log(params)
 		return params
 	}
 
@@ -124,7 +121,7 @@ export default (cid) => {
 			options,
 			items
 
-		items = parseThumbnailElements(galleryElement)
+		items = parseThumbnailElements(galleryElement, fromURL)
 
 		// define options (if needed)
 		options = {
@@ -197,9 +194,9 @@ export default (cid) => {
 	// Parse URL and open gallery if it contains #&pid=3&gid=1
 	let hashData = photoswipeParseHash()
 	if (hashData.photo) {
-        let ge = document.querySelector(`#moul`)
+		let ge = document.querySelector(`#moul`)
 		setTimeout(() => {
-			openPhotoSwipe(hashData.photo, ge, true, true)
+			openPhotoSwipe(hashData.photo, ge.childNodes[1], true, true)
 		}, 150)
 	}
 }
