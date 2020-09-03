@@ -190,14 +190,14 @@ export default (cid) => {
 	}
 
 	// loop through all gallery elements and bind events
-	let galleryElement = document.querySelector(`.moul-collection-${cid}`)
+	let galleryElement = document.querySelector(`#moul`)
 	galleryElement.setAttribute('data-pswp-uid', cid)
 	galleryElement.onclick = onThumbnailsClick
 
 	// Parse URL and open gallery if it contains #&pid=3&gid=1
 	let hashData = photoswipeParseHash()
 	if (hashData.photo) {
-        let ge = document.querySelector(`.moul-collection-${cid}`)
+        let ge = document.querySelector(`#moul`)
 		setTimeout(() => {
 			openPhotoSwipe(hashData.photo, ge, true, true)
 		}, 150)
