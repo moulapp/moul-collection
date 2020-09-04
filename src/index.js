@@ -84,6 +84,11 @@ const Layout = ({ collection, containerWidth, cp }) => {
 		cp
 	)
 	const container = { width, height }
+
+	const handleClick = () => {
+		window.onThumbnailsClick()
+	}
+
 	return (
 		<>
 			<div style={container} class="moul-collection">
@@ -95,6 +100,7 @@ const Layout = ({ collection, containerWidth, cp }) => {
 							data-pid={p.name}
 							data-color={p.color}
 							data-msrc={p.sqip}
+							onClick={handleClick}
 						>
 							<img
 								src={p.sqip}
@@ -142,7 +148,6 @@ collections.forEach((c, i) => {
 		<Collection
 			photos={JSON.parse(c.getAttribute('value'))}
 			cp={c.getAttribute('data-cp')}
-			cid={i}
 		/>,
 		$(`.moul-collection-${i}`)
 	)

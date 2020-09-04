@@ -135,10 +135,7 @@ export default (cid) => {
 		gallery.init()
 	}
 
-	let galleryElement = document.querySelectorAll('.moul-collection')
-	galleryElement.forEach(ge => {
-		ge.onclick = onThumbnailsClick
-	})
+	window.onThumbnailsClick = onThumbnailsClick
 
 	let hashData = photoswipeParseHash()
 	if (hashData.photo) {
