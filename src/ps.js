@@ -2,8 +2,8 @@ import PhotoSwipe from './photoswipe/index'
 import PhotoSwipeUI_Default from './photoswipe/ui-default.js'
 
 export default (cid) => {
-	const allFigure = document.querySelectorAll('.moul-collection figure');
-	allFigure.forEach((af, i) => af.setAttribute('data-id', i+1))
+	const allFigure = document.querySelectorAll('.moul-collection figure')
+	allFigure.forEach((af, i) => af.setAttribute('data-id', i + 1))
 
 	let parseThumbnailElements = function () {
 		let thumbElements = allFigure,
@@ -40,8 +40,8 @@ export default (cid) => {
 				item.title = figureEl.children[1].innerHTML
 			}
 
-			const msrc = linkEl.getAttribute('data-msrc');
-			item.msrc =  msrc ? msrc : linkEl.getAttribute('href')
+			const msrc = linkEl.getAttribute('data-msrc')
+			item.msrc = msrc ? msrc : linkEl.getAttribute('href')
 
 			item.el = figureEl // save link to element for getThumbBoundsFn
 			items.push(item)
@@ -73,7 +73,7 @@ export default (cid) => {
 
 		let index = clickedListItem.getAttribute('data-id')
 		openPhotoSwipe(index)
-		
+
 		return false
 	}
 
@@ -86,16 +86,13 @@ export default (cid) => {
 			return params
 		}
 
-        let vars = hash.split('/')
-        params[vars[0]] = vars[1]
+		let vars = hash.split('/')
+		params[vars[0]] = vars[1]
 
 		return params
 	}
 
-	let openPhotoSwipe = function (
-		index,
-		fromURL = false
-	) {
+	let openPhotoSwipe = function (index, fromURL = false) {
 		let pswpElement = document.querySelectorAll('.pswp')[0],
 			gallery,
 			options

@@ -1,9 +1,8 @@
-import { h, render } from 'preact';
-import { useState, useEffect } from 'preact/hooks';
+import { h, render } from 'preact'
+import { useState, useEffect } from 'preact/hooks'
 import { fixed_partition } from 'image-layout'
 import lazySizes from 'lazysizes'
 import ps from './ps'
-
 ;(() => {
 	const throttle = (type, name, obj) => {
 		obj = obj || window
@@ -65,7 +64,7 @@ const calculate = (collection, containerWidth, cp) => {
 				top: `${layout.positions[i].y}px`,
 				left: `${layout.positions[i].x}px`,
 				background: collection[i].color || '',
-				position: 'absolute'
+				position: 'absolute',
 			},
 		})
 	})
