@@ -127,7 +127,6 @@ const Collection = ({ photos, cp }) => {
 	useEffect(() => {
 		window.addEventListener('optimizedResize', handleResize)
 		lazySizes.init()
-		ps()
 
 		return () => {
 			window.removeEventListener('optimizedResize', handleResize)
@@ -151,3 +150,7 @@ collections.forEach((c, i) => {
 		$(`.moul-collection-${i}`)
 	)
 })
+
+setTimeout(() => {
+	ps()
+}, 150)

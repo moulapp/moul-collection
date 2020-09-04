@@ -1,7 +1,7 @@
 import PhotoSwipe from './photoswipe/index'
 import PhotoSwipeUI_Default from './photoswipe/ui-default.js'
 
-export default (cid) => {
+export default () => {
 	const allFigure = document.querySelectorAll('.moul-collection figure')
 	allFigure.forEach((af, i) => af.setAttribute('data-id', i + 1))
 
@@ -92,7 +92,7 @@ export default (cid) => {
 		return params
 	}
 
-	let openPhotoSwipe = function (index, fromURL = false) {
+	let openPhotoSwipe = function (index) {
 		let pswpElement = document.querySelectorAll('.pswp')[0],
 			gallery,
 			options
@@ -136,9 +136,8 @@ export default (cid) => {
 
 	let hashData = photoswipeParseHash()
 	if (hashData.photo) {
-		let ge = document.querySelector('.moul-collection')
 		setTimeout(() => {
-			openPhotoSwipe(hashData.photo, true)
+			openPhotoSwipe(hashData.photo)
 		}, 150)
 	}
 }
